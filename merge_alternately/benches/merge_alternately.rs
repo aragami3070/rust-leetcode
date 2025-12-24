@@ -2,7 +2,7 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use merge_alternately::Solution;
 
 const ALL_INPUTS: [(&str, &str); 3] =
-    [("abc", "def"), ("abc", "def"), ("abc", "def")];
+    [("abcccc", "def"), ("abc", "defffff"), ("abc", "def")];
 
 fn bench_merge_alternately(c: &mut Criterion) {
     c.bench_function("bench_merge_alternately", |b| {
