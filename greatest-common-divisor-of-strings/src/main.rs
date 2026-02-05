@@ -5,43 +5,23 @@ impl Solution {
         if str1.len() == str2.len() && str1 == str2 {
             return str1;
         }
-        let max_str: Vec<u8>;
-        let mut res_str: Vec<u8>;
-        let min_str = if str1.len() >= str2.len() {
-            max_str = str1.as_bytes().to_vec();
-            res_str = str2.as_bytes().to_vec();
-            res_str.clone()
-        } else {
-            max_str = str2.as_bytes().to_vec();
-            res_str = str1.as_bytes().to_vec();
-            res_str.clone()
-        };
 
-        'main_loop: while !res_str.is_empty() {
-            while !max_str.len().is_multiple_of(res_str.len())
-                || !min_str.len().is_multiple_of(res_str.len())
-            {
-                res_str.pop();
-                if res_str.is_empty() {
-                    return "".to_string();
-                }
-            }
-            for (index, &symbol) in max_str.iter().enumerate() {
-                let res_index = index % res_str.len();
-                if symbol != res_str[res_index]
-                    || min_str[index % min_str.len()] != res_str[res_index]
-                {
-                    res_str.pop();
-                    continue 'main_loop;
-                }
-            }
-            return match String::from_utf8(res_str) {
-                Ok(s) => s,
-                Err(_) => "".to_string(),
-            };
+        let len_str1 = str1.len();
+        let len_str2 = str2.len();
+        if str1.clone() + &str2 != str2 + &str1 {
+            return String::from("");
         }
+        let last_symbol_idx = Self::gcd(len_str1, len_str2);
 
-        "".to_string()
+        str1[..last_symbol_idx].to_string()
+    }
+
+    fn gcd(len1: usize, len2: usize) -> usize {
+        if len2 == 0 {
+            len1
+        } else {
+            Self::gcd(len2, len1 % len2)
+        }
     }
 }
 
@@ -121,10 +101,7 @@ mod test {
     #[test]
     fn correct_gcd_of_strings_8() {
         assert_eq!(
-            Solution::gcd_of_strings(
-                "AAAAAAAAA".to_string(),
-                "AAACCC".to_string()
-            ),
+            Solution::gcd_of_strings("AAAAAAAAA".to_string(), "AAACCC".to_string()),
             ""
         );
     }
